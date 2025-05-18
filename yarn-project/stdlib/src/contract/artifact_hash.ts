@@ -4,8 +4,7 @@ import { createLogger } from '@aztec/foundation/log';
 import { numToUInt8 } from '@aztec/foundation/serialize';
 import { MerkleTree, MerkleTreeCalculator } from '@aztec/foundation/trees';
 
-import deterministicStringify from 'json-stringify-deterministic';
-
+// import deterministicStringify from 'json-stringify-deterministic';
 import { type ContractArtifact, type FunctionArtifact, FunctionSelector, FunctionType } from '../abi/index.js';
 
 const VERSION = 1;
@@ -60,7 +59,7 @@ export async function computeArtifactHashPreimage(artifact: ContractArtifact) {
 }
 
 export function computeArtifactMetadataHash(artifact: ContractArtifact) {
-  return sha256Fr(Buffer.from(deterministicStringify({ name: artifact.name, outputs: artifact.outputs }), 'utf-8'));
+  return sha256Fr(Buffer.from(JSON.stringify({ name: artifact.name, outputs: artifact.outputs }), 'utf-8'));
 }
 
 export async function computeArtifactFunctionTreeRoot(artifact: ContractArtifact, fnType: FunctionType) {
@@ -105,7 +104,7 @@ export async function computeFunctionArtifactHash(
 }
 
 export function computeFunctionMetadataHash(fn: FunctionArtifact) {
-  return sha256Fr(Buffer.from(deterministicStringify(fn.returnTypes), 'utf8'));
+  return sha256Fr(Buffer.from(JSON.stringify(fn.returnTypes), 'utf8'));
 }
 
 function getLogger() {

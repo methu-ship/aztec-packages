@@ -23,10 +23,12 @@ import {
   MethodNotSupportedRpcError,
   type StateOverride,
   type TransactionReceipt,
+  createNonceManager,
   formatGwei,
   getContractError,
   hexToBytes,
 } from 'viem';
+import { jsonRpc } from 'viem/nonce';
 
 import { type ExtendedViemWalletClient, type ViemClient, isExtendedClient } from './types.js';
 import { formatViemError } from './utils.js';
@@ -209,6 +211,11 @@ export class ReadOnlyL1TxUtils {
       ...defaultL1TxUtilsConfig,
       ...(config || {}),
     };
+    if (client.account && !client.account?.nonceManager) {
+      client.account.nonceManager = createNonceManager({
+        source: jsonRpc(),
+      });
+    }
   }
 
   public interrupt() {
